@@ -12,7 +12,6 @@ readme = "README.md"
 homepage = "https://docs.rs/rawuefi/latest/rawuefi"
 repository = "https://github.com/ArtexOS/rawuefi"
 license = "GPL-3.0-only"
-license-file = "COPYING"
 keywords = [ "efi", "uefi" ]
 categories = [ "efi", "uefi" ]
 resolver = "2"

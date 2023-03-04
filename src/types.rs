@@ -17,10 +17,13 @@
 
 //! # UEFI Data Types
 //!
-//! The `types` module provides common data types defined in the UEFI Specification. These data
-//! types are used throughout RawUEFI, and therefore, `types` is a commonly used module.
+//! The `types` module provides definitions for common data types defined in the UEFI Specification.
+//! These data types are used throughout RawUEFI, and therefore, `types` is a commonly used and
+//! important module. These data types can also be found in [Section 2.3.1 of the UEFI Specification],
+//! for reference purposes.
 //!
-//! The data types are defined as type aliases, and are listed as follows:
+//! The data types are defined as type aliases in this crate, and are listed below as follows, with
+//! the corresponding types in Rust.
 //!
 //! | Data Type            |  Type in Rust        |
 //! | -------------------- | -------------------- |
@@ -89,6 +92,8 @@
 //! [`u64`]: https://doc.rust-lang.org/nightly/std/primitive.u64.html
 //! [`i128`]: https://doc.rust-lang.org/nightly/std/primitive.i128.html
 //! [`u128`]: https://doc.rust-lang.org/nightly/std/primitive.u128.html
+//!
+//! [Section 2.3.1 of the UEFI Specification]: https://uefi.org/specs/UEFI/2.10/02_Overview.html#data-types
 
 // ----- BEGIN PRIMITIVE TYPES -----
 

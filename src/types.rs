@@ -155,14 +155,14 @@ pub struct EFI_MAC_ADDRESS {
 }
 
 /// 4-byte buffer. An IPv4 internet protocol address.
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_IPv4_ADDRESS {
     pub Addr: [UINT8; 4]
 }
 
 /// 16-byte buffer. An IPv6 internet protocol address.
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_IPv6_ADDRESS {
     pub Addr: [UINT8; 16]

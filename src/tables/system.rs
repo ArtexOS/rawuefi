@@ -31,6 +31,8 @@
 //!
 //! [`EFI_SYSTEM_TABLE`]: crate::tables::system::EFI_SYSTEM_TABLE
 //! [`Hdr`]: ./struct.EFI_SYSTEM_TABLE.html#structfield.Hdr
+//! [`FirmwareVendor`]: ./struct.EFI_SYSTEM_TABLE.html#structfield.FirmwareVendor
+//! [`FirmwareRevision`]: ./struct.EFI_SYSTEM_TABLE.html#structfield.FirmwareRevision
 //!
 //! [Section 4.3 of the UEFI Specification]: https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html#efi-system-table-1
 

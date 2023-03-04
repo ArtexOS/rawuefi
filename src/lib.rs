@@ -31,6 +31,8 @@
 //! module in detail. The module names should also give a rough idea of the functionality of
 //! individual modules.
 
+#![no_std]
+
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 

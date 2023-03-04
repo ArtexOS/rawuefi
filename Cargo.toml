@@ -13,5 +13,5 @@ homepage = "https://docs.rs/rawuefi/latest/rawuefi"
 repository = "https://github.com/ArtexOS/rawuefi"
 license = "GPL-3.0-only"
 keywords = [ "efi", "uefi" ]
-categories = [ "efi", "uefi" ]
+categories = [ "api-bindings", "no-std" ]
 resolver = "2"

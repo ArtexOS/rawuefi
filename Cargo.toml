@@ -1,0 +1,18 @@
+[package]
+name = "rawuefi"
+version = "0.1.0"
+authors = [ "HTGAzureX1212." ]
+edition = "2021"
+rust-version = "1.69.0"
+description = """
+RawUEFI is a crate providing idiomatic raw bindings to UEFI with accordance to UEFI Specification 2.10.
+"""
+documentation = "https://docs.rs/rawuefi/latest/rawuefi"
+readme = "README.md"
+homepage = "https://docs.rs/rawuefi/latest/rawuefi"
+repository = "https://github.com/ArtexOS/rawuefi"
+license = "GPL-3.0-only"
+license-file = "COPYING"
+keywords = [ "efi", "uefi" ]
+categories = [ "efi", "uefi" ]
+resolver = "2"

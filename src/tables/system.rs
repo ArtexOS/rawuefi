@@ -26,11 +26,16 @@
 //! [`FirmwareRevision`], [`RuntimeServices`], [`NumberOfTableEntries`], and [`ConfigurationTable`]
 //! fields are valid.
 //!
-//! The EFI System Table data structure is defined in this crate as the [`EFI_SYSTEM_TABLE`] structure.
+//! See [Section 4.3 of the UEFI Specification] for more details. The EFI System Table data
+//! structure is defined in this crate as the [`EFI_SYSTEM_TABLE`] structure.
 //!
 //! [`EFI_SYSTEM_TABLE`]: crate::tables::system::EFI_SYSTEM_TABLE
+//! [`Hdr`]: ./struct.EFI_SYSTEM_TABLE.html#structfield.Hdr
+//!
+//! [Section 4.3 of the UEFI Specification]: https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html#efi-system-table-1
 
-use crate::types::{UINT32, UINT64};
+use crate::tables::EFI_TABLE_HEADER;
+use crate::types::{CHAR16, UINT32, UINT64};
 
 /// Signature for the EFI System Table.
 pub const EFI_SYSTEM_TABLE_SIGNATURE: UINT64 = 0x5453595320494249;
@@ -64,5 +69,27 @@ pub const EFI_1_10_SYSTEM_TABLE_REVISION: UINT32 = (1 << 16) | 10;
 /// Revision of the 1.0.2 EFI System Table.
 pub const EFI_1_02_SYSTEM_TABLE_REVISION: UINT32 = (1 << 16) | 02;
 
+/// The EFI specification version.
+pub const EFI_SPECIFICATION_VERSION: UINT32 = EFI_SYSTEM_TABLE_REVISION;
+/// The EFI System Table revision.
+pub const EFI_SYSTEM_TABLE_REVISION: UINT32 = EFI_2_100_SYSTEM_TABLE_REVISION;
+
+/// Contains pointers to the runtime and boot services tables.
 #[repr(C)]
-pub struct EFI_SYSTEM_TABLE;
+pub struct EFI_SYSTEM_TABLE {
+    /// The table header for the EFI System Table. This header contains the
+    /// [`EFI_SYSTEM_TABLE_SIGNATURE`] and [`EFI_SYSTEM_TABLE_REVISION`] values along with the size
+    /// of the [`EFI_SYSTEM_TABLE`] structure and a 32-bit CRC to verify that the contents of the
+    /// EFI System Table are valid.
+    ///
+    /// [`EFI_SYSTEM_TABLE_SIGNATURE`]: crate::tables::system::EFI_SYSTEM_TABLE_SIGNATURE
+    /// [`EFI_SYSTEM_TABLE_REVISION`]: crate::tables::system::EFI_SYSTEM_TABLE_REVISION
+    /// [`EFI_SYSTEM_TABLE`]: crate::tables::system::EFI_SYSTEM_TABLE
+    pub Hdr: EFI_TABLE_HEADER,
+    /// A pointer to a null terminated string that identifies the vendor that produces the system
+    /// firmware for the platform.
+    pub FirmwareVendor: *mut CHAR16,
+    /// A firmware vendor specific value that identifies the revision of the system firmware for
+    /// the platform.
+    pub FirmwareRevision: UINT32,
+}

@@ -34,6 +34,8 @@
 
 use crate::types::{UINT32, UINT64};
 
+pub mod system;
+
 /// Data structure that precedes all of the standard EFI table types.
 ///
 /// **Note 1:** The capabilities found in the EFI System Table, Runtime Services Table and Boot

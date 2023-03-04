@@ -22,24 +22,34 @@
 //!
 //! The data types are defined as type aliases, and are listed as follows:
 //!
-//! | Data Type   |  Type in Rust  |
-//! | ----------- | -------------- |
-//! | [`BOOLEAN`] | [`u8`]         |
-//! | [`INTN`]    | [`isize`]      |
-//! | [`UINTN`]   | [`usize`]      |
-//! | [`INT8`]    | [`i8`]         |
-//! | [`UINT8`]   | [`u8`]         |
-//! | [`INT16`]   | [`i16`]        |
-//! | [`UINT16`]  | [`u16`]        |
-//! | [`INT32`]   | [`i32`]        |
-//! | [`UINT32`]  | [`u32`]        |
-//! | [`INT64`]   | [`i64`]        |
-//! | [`UINT64`]  | [`u64`]        |
-//! | [`INT128`]  | [`i128`]       |
-//! | [`UINT128`] | [`u128`]       |
-//! | [`CHAR8`]   | [`u8`]         |
-//! | [`CHAR16`]  | [`u16`]        |
-//! | [`VOID`]    | [`VOID`]        |
+//! | Data Type            |  Type in Rust        |
+//! | -------------------- | -------------------- |
+//! | [`BOOLEAN`]          | [`u8`]               |
+//! | [`INTN`]             | [`isize`]            |
+//! | [`UINTN`]            | [`usize`]            |
+//! | [`INT8`]             | [`i8`]               |
+//! | [`UINT8`]            | [`u8`]               |
+//! | [`INT16`]            | [`i16`]              |
+//! | [`UINT16`]           | [`u16`]              |
+//! | [`INT32`]            | [`i32`]              |
+//! | [`UINT32`]           | [`u32`]              |
+//! | [`INT64`]            | [`i64`]              |
+//! | [`UINT64`]           | [`u64`]              |
+//! | [`INT128`]           | [`i128`]             |
+//! | [`UINT128`]          | [`u128`]             |
+//! | [`CHAR8`]            | [`u8`]               |
+//! | [`CHAR16`]           | [`u16`]              |
+//! | [`VOID`]             | [`VOID`]             |
+//! | [`EFI_GUID`]         | [`EFI_GUID`]         |
+//! | [`EFI_STATUS`]       | [`UINTN`]            |
+//! | [`EFI_HANDLE`]       | `*mut` [`VOID`]      |
+//! | [`EFI_EVENT`]        | `*mut` [`VOID`]      |
+//! | [`EFI_LBA`]          | [`UINT64`]           |
+//! | [`EFI_TPL`]          | [`UINTN`]            |
+//! | [`EFI_MAC_ADDRESS`]  | [`EFI_MAC_ADDRESS`]  |
+//! | [`EFI_IPv4_ADDRESS`] | [`EFI_IPv4_ADDRESS`] |
+//! | [`EFI_IPv6_ADDRESS`] | [`EFI_IPv6_ADDRESS`] |
+//! | [`EFI_IP_ADDRESS`]   | [`EFI_IP_ADDRESS`]   |
 //!
 //! [`BOOLEAN`]: crate::types::BOOLEAN
 //! [`INTN`]: crate::types::INTN
@@ -57,6 +67,15 @@
 //! [`CHAR8`]: crate::types::INT128
 //! [`CHAR16`]: crate::types::UINT128
 //! [`VOID`]: crate::types::VOID
+//! [`EFI_GUID`]: crate::types::EFI_GUID
+//! [`EFI_STATUS`]: crate::types::EFI_STATUS
+//! [`EFI_EVENT`]: crate::types::EFI_EVENT
+//! [`EFI_LBA`]: crate::types::EFI_LBA
+//! [`EFI_TPL`]: crate::types::EFI_TPL
+//! [`EFI_MAC_ADDRESS`]: crate::types::EFI_MAC_ADDRESS
+//! [`EFI_IPv4_ADDRESS`]: crate::types::EFI_IPv4_ADDRESS
+//! [`EFI_IPv6_ADDRESS`]: crate::types::EFI_IPv6_ADDRESS
+//! [`EFI_IP_ADDRESS`]: crate::types::EFI_IP_ADDRESS
 //!
 //! [`u8`]: https://doc.rust-lang.org/nightly/std/primitive.u8.html
 //! [`isize`]: https://doc.rust-lang.org/nightly/std/primitive.isize.html
@@ -70,6 +89,8 @@
 //! [`u64`]: https://doc.rust-lang.org/nightly/std/primitive.u64.html
 //! [`i128`]: https://doc.rust-lang.org/nightly/std/primitive.i128.html
 //! [`u128`]: https://doc.rust-lang.org/nightly/std/primitive.u128.html
+
+// ----- BEGIN PRIMITIVE TYPES -----
 
 /// Logical Boolean. 1-byte value containing a `0` for `FALSE` and `1` for `TRUE`. Any other values are *undefined*.
 pub type BOOLEAN = u8;
@@ -103,3 +124,55 @@ pub type CHAR8 = u8;
 pub type CHAR16 = u16;
 /// Undeclared type.
 pub enum VOID {}
+
+// ----- END PRIMITIVE TYPES -----
+
+// ----- BEGIN COMPOUND TYPES -----
+
+/// 128-bit buffer containing a unique identifier value. Unless otherwise specified, aligned on a 64-bit boundary.
+#[repr(C)]
+pub struct EFI_GUID(pub UINT32, pub UINT16, pub UINT16, pub [UINT8; 8]);
+
+/// Status code.
+pub type EFI_STATUS = UINTN;
+
+/// A collection of related interfaces.
+pub type EFI_HANDLE = *mut VOID;
+
+/// Handle to an event structure.
+pub type EFI_EVENT = *mut VOID;
+
+/// Logical block address.
+pub type EFI_LBA = UINT64;
+
+/// Task priority level.
+pub type EFI_TPL = UINTN;
+
+/// 32-byte buffer containing a network Media Access Control address.
+#[repr(C)]
+pub struct EFI_MAC_ADDRESS {
+    pub Addr: [UINT8; 32]
+}
+
+/// 4-byte buffer. An IPv4 internet protocol address.
+#[derive(Copy)]
+#[repr(C)]
+pub struct EFI_IPv4_ADDRESS {
+    pub Addr: [UINT8; 4]
+}
+
+/// 16-byte buffer. An IPv6 internet protocol address.
+#[derive(Copy)]
+#[repr(C)]
+pub struct EFI_IPv6_ADDRESS {
+    pub Addr: [UINT8; 16]
+}
+
+/// 16-byte buffer aligned on a 4-byte boundary. An IPv4 or IPv6 internet protocol address.
+#[repr(C)]
+pub union EFI_IP_ADDRESS {
+    pub IPv4: EFI_IPv4_ADDRESS,
+    pub IPv6: EFI_IPv6_ADDRESS,
+}
+
+// ----- END COMPOUND TYPES -----

@@ -57,7 +57,7 @@ impl EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
     /// memory used for buffering keystroke data and put the input stream in a known empty state.
     ///
     /// As part of initialization process, the firmware/device will make a quick but reasonable attempt
-    /// to verify that the device is functioning. If the `ExtendedVerification` flag is `TRUE` the
+    /// to verify that the device is functioning. If the [`ExtendedVerification`] flag is `TRUE` the
     /// firmware may take an extended amount of time to verify the device is operating on reset.
     /// Otherwise the reset operation is to occur as quickly as possible.
     ///
@@ -78,6 +78,7 @@ impl EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
     /// [`EFI_DEVICE_ERROR`] - the device is not functioning correctly and could not be reset.
     ///
     /// [`Reset()`]: ./struct.EFI_SIMPLE_TEXT_INPUT_PROTOCOL.html#method.Reset
+    /// [`ExtendedVerification`]: ./struct.EFI_SIMPLE_TEXT_INPUT_PROTOCOL.html#extendedverification
     /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
     /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
     pub unsafe fn Reset(&mut self, ExtendedVerification: BOOLEAN) -> EFI_STATUS {

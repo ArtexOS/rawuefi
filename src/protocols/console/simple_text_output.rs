@@ -21,7 +21,7 @@
 //!
 //! [`EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
 
-use crate::types::EFI_GUID;
+use crate::types::{BOOLEAN, EFI_GUID, EFI_STATUS};
 
 /// GUID for the [`EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL`].
 ///
@@ -33,4 +33,45 @@ pub const EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_GUID: EFI_GUID = EFI_GUID(
     [0x8E, 0x39, 0x00, 0xA0, 0xC9, 0x69, 0x72, 0x3B],
 );
 
-pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
+pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
+    Reset: EFI_TEXT_RESET,
+}
+
+impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
+    /// Resets the text output device hardware.
+    ///
+    /// The [`Reset()`] function resets the text output device hardware. The cursor position is set
+    /// to (0, 0), and the screen is cleared to the default background color for the output device.
+    ///
+    /// As part of initialization process, the firmware/device will make a quick but reasonable
+    /// attempt to verify that the device is functioning. If the `ExtendedVerification` flag is `TRUE`
+    /// the firmware may take an extended amount of time to verify the device is operating on reset.
+    /// Otherwise the reset operation is to occur as quickly as possible.
+    ///
+    /// The hardware verification process is not defined by this specification and is left up to the
+    /// platform firmware or driver to implement.
+    ///
+    /// # Parameters
+    ///
+    /// ## `ExtendedVerification`
+    ///
+    /// Indicates that the driver may perform a more exhaustive verification operation of the device
+    /// during reset.
+    ///
+    /// # Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - the text output device was reset.
+    ///
+    /// [`EFI_DEVICE_ERROR`] - the text output device is not functioning correctly and could not be
+    /// reset.
+    ///
+    /// [`ExtendedVerification`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#extendedverification
+    pub unsafe fn Reset(&mut self, ExtendedVerification: BOOLEAN) -> EFI_STATUS {
+        (self.Reset)(self, ExtendedVerification)
+    }
+}
+
+type EFI_TEXT_RESET = extern "efiapi" fn(
+    This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL,
+    ExtendedVerification: BOOLEAN
+) -> EFI_STATUS;

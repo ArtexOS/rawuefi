@@ -41,6 +41,7 @@ pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     SetMode: EFI_TEXT_SET_MODE,
     SetAttribute: EFI_TEXT_SET_ATTRIBUTE,
     ClearScreen: EFI_TEXT_CLEAR_SCREEN,
+    SetCursorPosition: EFI_TEXT_SET_CURSOR_POSITION,
 }
 
 impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
@@ -271,6 +272,37 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     pub unsafe fn ClearScreen(&mut self) -> EFI_STATUS {
         (self.ClearScreen)(self)
     }
+
+    /// Makes the cursor visible or invisible.
+    ///
+    /// The [`SetCursorPosition()`] function sets the current coordinates of the cursor position.
+    /// The upper left corner of the screen is defined as coordinate (0, 0).
+    ///
+    /// # Parameters
+    ///
+    /// ## `Column`, `Row`
+    ///
+    /// The position to set the cursor to. Must greater than or equal to zero and less than the
+    /// number of columns and rows returned by [`QueryMode()`].
+    ///
+    /// # Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - the operation completed successfully.
+    ///
+    /// [`EFI_DEVICE_ERROR`] - the device had an error and could not complete the request.
+    ///
+    /// [`EFI_UNSUPPORTED`] - the output device is not in a valid text mode, or the cursor position
+    /// is invalid for the current mode.
+    ///
+    /// [`QueryMode()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.QueryMode
+    /// [`SetCursorPosition()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.SetCursorPosition
+    ///
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
+    /// [`EFI_UNSUPPORTED`]: crate::status::EFI_UNSUPPORTED
+    pub unsafe fn SetCursorPosition(&mut self, Column: UINTN, Row: UINTN) -> EFI_STATUS {
+        (self.SetCursorPosition)(self, Column, Row)
+    }
 }
 
 pub const BOXDRAW_HORIZONTAL: CHAR16 = 0x2500;
@@ -389,3 +421,9 @@ type EFI_TEXT_SET_ATTRIBUTE =
 
 type EFI_TEXT_CLEAR_SCREEN =
     extern "efiapi" fn(This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL) -> EFI_STATUS;
+
+type EFI_TEXT_SET_CURSOR_POSITION = extern "efiapi" fn(
+    This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL,
+    Column: UINTN,
+    Row: UINTN,
+) -> EFI_STATUS;

@@ -35,6 +35,7 @@ use crate::types::{BOOLEAN, EFI_STATUS, UINT32, UINT8};
 pub struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
     Reset: EFI_INPUT_RESET_EX,
     ReadKeyStrokeEx: EFI_INPUT_READ_KEY_EX,
+    SetState: EFI_SET_STATE,
 }
 
 impl EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
@@ -142,6 +143,40 @@ impl EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
     pub unsafe fn ReadKeyStrokeEx(&mut self, KeyData: *mut EFI_KEY_DATA) -> EFI_STATUS {
         (self.ReadKeyStrokeEx)(self, KeyData)
     }
+
+    /// Set certain state for the input device.
+    ///
+    /// The [`SetState()`] function allows the input device hardware to have state settings adjusted.
+    /// By calling the `SetState()` function with the [`EFI_KEY_STATE_EXPOSED`] bit active in the
+    /// KeyToggleState parameter, this will enable the `ReadKeyStrokeEx` function to return
+    /// incomplete keystrokes such as the holding down of certain keys which are expressed as a
+    /// part of KeyState when there is no Key data.
+    ///
+    /// # Parameters
+    ///
+    /// ## `KeyToggleState`
+    ///
+    /// Pointer to the [`EFI_KEY_TOGGLE_STATE`] to set the state for the input device.
+    ///
+    /// # Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - the device state was set appropriately.
+    ///
+    /// [`EFI_DEVICE_ERROR`] - the device is not functioning correctly and could not have the
+    /// setting adjusted.
+    ///
+    /// [`EFI_UNSUPPORTED`] - the device does not support the ability to have its state set or the
+    /// requested state change was not supported.
+    ///
+    /// [`EFI_KEY_TOGGLE_STATE`]: crate::protocols::console::simple_text_input_ex::EFI_KEY_TOGGLE_STATE
+    /// [`EFI_KEY_STATE_EXPOSED`]: crate::protocols::console::simple_text_input_ex::EFI_KEY_STATE_EXPOSED
+    /// [`SetState()`]: ./struct.EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.html#method.SetState
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
+    /// [`EFI_UNSUPPORTED`]: crate::status::EFI_UNSUPPORTED
+    pub unsafe fn SetState(&mut self, KeyToggleState: *mut EFI_KEY_TOGGLE_STATE) -> EFI_STATUS {
+        (self.SetState)(self, KeyToggleState)
+    }
 }
 
 /// Keystroke state data for the key that was pressed.
@@ -190,4 +225,9 @@ type EFI_INPUT_RESET_EX = extern "efiapi" fn(
 type EFI_INPUT_READ_KEY_EX = extern "efiapi" fn(
     This: *mut EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL,
     KeyData: *mut EFI_KEY_DATA,
+) -> EFI_STATUS;
+
+type EFI_SET_STATE = extern "efiapi" fn(
+    This: *mut EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL,
+    KeyToggleState: *mut EFI_KEY_TOGGLE_STATE,
 ) -> EFI_STATUS;

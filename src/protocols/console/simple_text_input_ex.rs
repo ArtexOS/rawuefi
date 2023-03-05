@@ -20,7 +20,8 @@
 //! This module defines the Simple Text Input Ex Protocol, also known as the
 //! [`EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL`].
 
-use crate::types::{BOOLEAN, EFI_STATUS};
+use crate::protocols::console::simple_text_input::EFI_INPUT_KEY;
+use crate::types::{BOOLEAN, EFI_STATUS, UINT32, UINT8};
 
 /// The Simple Text Input Ex protocol defines an extension to the Simple Text Input protocol
 /// which enables various new capabilities
@@ -72,7 +73,32 @@ impl EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
     }
 }
 
+/// Keystroke state data for the key that was pressed.
+pub struct EFI_KEY_DATA {
+    /// The EFI scan code and Unicode value returned from the input device.
+    pub Key: EFI_INPUT_KEY,
+    /// The current state of various toggled attributes as well as input modifier values.
+    pub KeyState: EFI_KEY_STATE,
+}
+
+/// Current state of various toggled attributes as well as input modifier values.
+pub struct EFI_KEY_STATE {
+    /// Reflects the currently pressed shift modifiers for the input device. The returned value is
+    /// valid only if the high order bit has been set.
+    pub KeyShiftState: UINT32,
+    /// Reflects the current internal state of various toggled attributes. The returned value is valid only if the high order bit has been set.
+    pub KeyToggleState: EFI_KEY_TOGGLE_STATE,
+}
+
+/// Current internal state of various toggled attributes.
+pub type EFI_KEY_TOGGLE_STATE = UINT8;
+
 type EFI_INPUT_RESET_EX = extern "efiapi" fn(
     This: *mut EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL,
     ExtendedVerification: BOOLEAN
+) -> EFI_STATUS;
+
+type EFI_INPUT_READ_KEY_EX = extern "efiapi" fn(
+    This: *mut EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL,
+    KeyData: *mut EFI_KEY_DATA,
 ) -> EFI_STATUS;

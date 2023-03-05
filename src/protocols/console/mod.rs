@@ -30,6 +30,8 @@
 
 pub mod simple_text_input;
 pub mod simple_text_input_ex;
+pub mod simple_text_output;
 
 pub use simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
 pub use simple_text_input_ex::EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL;
+pub use simple_text_output::EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;

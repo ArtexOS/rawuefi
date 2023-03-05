@@ -21,7 +21,7 @@
 //!
 //! [`EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
 
-use crate::types::{BOOLEAN, EFI_GUID, EFI_STATUS};
+use crate::types::{BOOLEAN, CHAR16, EFI_GUID, EFI_STATUS};
 
 /// GUID for the [`EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL`].
 ///
@@ -35,6 +35,7 @@ pub const EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_GUID: EFI_GUID = EFI_GUID(
 
 pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     Reset: EFI_TEXT_RESET,
+    OutputString: EFI_TEXT_STRING,
 }
 
 impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
@@ -69,9 +70,18 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     pub unsafe fn Reset(&mut self, ExtendedVerification: BOOLEAN) -> EFI_STATUS {
         (self.Reset)(self, ExtendedVerification)
     }
+
+    pub unsafe fn OutputString(&mut self, String: *mut CHAR16) -> EFI_STATUS {
+        (self.OutputString)(self, String)
+    }
 }
 
 type EFI_TEXT_RESET = extern "efiapi" fn(
     This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL,
     ExtendedVerification: BOOLEAN
+) -> EFI_STATUS;
+
+type EFI_TEXT_STRING = extern "efiapi" fn(
+    This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL,
+    String: *mut CHAR16,
 ) -> EFI_STATUS;

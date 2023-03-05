@@ -66,19 +66,111 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     /// [`EFI_DEVICE_ERROR`] - the text output device is not functioning correctly and could not be
     /// reset.
     ///
+    /// [`Reset()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.Reset
     /// [`ExtendedVerification`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#extendedverification
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
     pub unsafe fn Reset(&mut self, ExtendedVerification: BOOLEAN) -> EFI_STATUS {
         (self.Reset)(self, ExtendedVerification)
     }
 
+    /// Writes a string to the output device.
+    ///
+    /// The [`OutputString()`] function writes a string to the output device. This is the most
+    /// basic output mechanism on an output device. The String is displayed at the current cursor
+    /// location on the output device(s) and the cursor is advanced according to the rules listed
+    /// in EFI Cursor Location/Advance Rules.
+    ///
+    /// # Parameters
+    ///
+    /// ## `String`
+    ///
+    /// The null-terminated string to be displayed on the output device(s).
+    ///
+    /// # Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - the string was output to the device.
+    ///
+    /// [`EFI_DEVICE_ERROR`] - the device reported an error while attempting to output the text.
+    /// reset.
+    ///
+    /// [`EFI_UNSUPPORTED`] - the output device’s mode is not currently in a defined text mode.
+    ///
+    /// [`EFI_WARN_UNKNOWN_GLYPH`] - this warning code indicates that some of the characters in the
+    /// string could not be rendered and were skipped.
+    ///
+    /// [`OutputString()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.OutputString
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
+    /// [`EFI_UNSUPPORTED`]: crate::status::EFI_UNSUPPORTED
+    /// [`EFI_WARN_UNKNOWN_GLYPH`]: crate::status::EFI_WARN_UNKNOWN_GLYPH
     pub unsafe fn OutputString(&mut self, String: *mut CHAR16) -> EFI_STATUS {
         (self.OutputString)(self, String)
     }
 }
 
+pub const BOXDRAW_HORIZONTAL: CHAR16 = 0x2500;
+pub const BOXDRAW_VERTICAL: CHAR16 = 0x2502;
+pub const BOXDRAW_DOWN_RIGHT: CHAR16 = 0x250C;
+pub const BOXDRAW_DOWN_LEFT: CHAR16 = 0x2510;
+pub const BOXDRAW_UP_RIGHT: CHAR16 = 0x2514;
+pub const BOXDRAW_UP_LEFT: CHAR16 = 0x2518;
+pub const BOXDRAW_VERTICAL_RIGHT: CHAR16 = 0x251C;
+pub const BOXDRAW_VERTICAL_LEFT: CHAR16 = 0x2524;
+pub const BOXDRAW_DOWN_HORIZONTAL: CHAR16 = 0x252C;
+pub const BOXDRAW_UP_HORIZONTAL: CHAR16 = 0x2534;
+pub const BOXDRAW_VERTICAL_HORIZONTAL: CHAR16 = 0x253C;
+
+pub const BOXDRAW_DOUBLE_HORIZONTAL: CHAR16 = 0x2550;
+pub const BOXDRAW_DOUBLE_VERTICAL: CHAR16 = 0x2551;
+pub const BOXDRAW_DOWN_RIGHT_DOUBLE: CHAR16 = 0x2552;
+pub const BOXDRAW_DOWN_DOUBLE_RIGHT: CHAR16 = 0x2553;
+pub const BOXDRAW_DOUBLE_DOWN_RIGHT: CHAR16 = 0x2554;
+pub const BOXDRAW_DOWN_LEFT_DOUBLE: CHAR16 = 0x2555;
+pub const BOXDRAW_DOWN_DOUBLE_LEFT: CHAR16 = 0x2556;
+pub const BOXDRAW_DOUBLE_DOWN_LEFT: CHAR16 = 0x2557;
+
+pub const BOXDRAW_UP_RIGHT_DOUBLE: CHAR16 = 0x2558;
+pub const BOXDRAW_UP_DOUBLE_RIGHT: CHAR16 = 0x2559;
+pub const BOXDRAW_DOUBLE_UP_RIGHT: CHAR16 = 0x255A;
+pub const BOXDRAW_UP_LEFT_DOUBLE: CHAR16 = 0x255B;
+pub const BOXDRAW_UP_DOUBLE_LEFT: CHAR16 = 0x255C;
+pub const BOXDRAW_DOUBLE_UP_LEFT: CHAR16 = 0x255D;
+
+pub const BOXDRAW_VERTICAL_RIGHT_DOUBLE: CHAR16 = 0x255E;
+pub const BOXDRAW_VERTICAL_DOUBLE_RIGHT: CHAR16 = 0x255F;
+pub const BOXDRAW_DOUBLE_VERTICAL_RIGHT: CHAR16 = 0x2560;
+
+pub const BOXDRAW_VERTICAL_LEFT_DOUBLE: CHAR16 = 0x2561;
+pub const BOXDRAW_VERTICAL_DOUBLE_LEFT: CHAR16 = 0x2562;
+pub const BOXDRAW_DOUBLE_VERTICAL_LEFT: CHAR16 = 0x2563;
+
+pub const BOXDRAW_DOWN_HORIZONTAL_DOUBLE: CHAR16 = 0x2564;
+pub const BOXDRAW_DOWN_DOUBLE_HORIZONTAL: CHAR16 = 0x2565;
+pub const BOXDRAW_DOUBLE_DOWN_HORIZONTAL: CHAR16 = 0x2566;
+
+pub const BOXDRAW_UP_HORIZONTAL_DOUBLE: CHAR16 = 0x2567;
+pub const BOXDRAW_UP_DOUBLE_HORIZONTAL: CHAR16 = 0x2568;
+pub const BOXDRAW_DOUBLE_UP_HORIZONTAL: CHAR16 = 0x2569;
+
+pub const BOXDRAW_VERTICAL_HORIZONTAL_DOUBLE: CHAR16 = 0x256A;
+pub const BOXDRAW_VERTICAL_DOUBLE_HORIZONTAL: CHAR16 = 0x256B;
+pub const BOXDRAW_DOUBLE_VERTICAL_HORIZONTAL: CHAR16 = 0x256C;
+
+pub const BLOCKELEMENT_FULL_BLOCK: CHAR16 = 0x2588;
+pub const BLOCKELEMENT_LIGHT_SHADE: CHAR16 = 0x2591;
+
+pub const GEOMETRICSHAPE_UP_TRIANGLE: CHAR16 = 0x25B2;
+pub const GEOMETRICSHAPE_RIGHT_TRIANGLE: CHAR16 = 0x25BA;
+pub const GEOMETRICSHAPE_DOWN_TRIANGLE: CHAR16 = 0x25BC;
+pub const GEOMETRICSHAPE_LEFT_TRIANGLE: CHAR16 = 0x25C4;
+
+pub const ARROW_UP: CHAR16 = 0x2191;
+pub const ARROW_DOWN: CHAR16 = 0x2193;
+
 type EFI_TEXT_RESET = extern "efiapi" fn(
     This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL,
-    ExtendedVerification: BOOLEAN
+    ExtendedVerification: BOOLEAN,
 ) -> EFI_STATUS;
 
 type EFI_TEXT_STRING = extern "efiapi" fn(

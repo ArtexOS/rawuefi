@@ -304,9 +304,7 @@ pub const EFI_SCROLL_LOCK_ACTIVE: EFI_KEY_TOGGLE_STATE = 0x01;
 pub const EFI_NUM_LOCK_ACTIVE: EFI_KEY_TOGGLE_STATE = 0x02;
 pub const EFI_CAPS_LOCK_ACTIVE: EFI_KEY_TOGGLE_STATE = 0x04;
 
-pub type EFI_KEY_NOTIFY_FUNCTION = extern "efiapi" fn(
-    KeyData: *mut EFI_KEY_DATA,
-) -> EFI_STATUS;
+pub type EFI_KEY_NOTIFY_FUNCTION = extern "efiapi" fn(KeyData: *mut EFI_KEY_DATA) -> EFI_STATUS;
 
 type EFI_INPUT_RESET_EX = extern "efiapi" fn(
     This: *mut EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL,

@@ -21,7 +21,7 @@
 //!
 //! [`EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
 
-use crate::types::{BOOLEAN, CHAR16, EFI_GUID, EFI_STATUS};
+use crate::types::{BOOLEAN, CHAR16, EFI_GUID, EFI_STATUS, UINTN};
 
 /// GUID for the [`EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL`].
 ///
@@ -37,6 +37,7 @@ pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     Reset: EFI_TEXT_RESET,
     OutputString: EFI_TEXT_STRING,
     TestString: EFI_TEXT_TEST_STRING,
+    QueryMode: EFI_TEXT_QUERY_MODE,
 }
 
 impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
@@ -141,6 +142,50 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     pub unsafe fn TestString(&mut self, String: *mut CHAR16) -> EFI_STATUS {
         (self.TestString)(self, String)
     }
+
+    /// Returns information for an available text mode that the output device(s) supports.
+    ///
+    /// The [`QueryMode()`] function returns information for an available text mode that the output
+    /// device(s) supports.
+    ///
+    /// It is required that all output devices support at least 80x25 text mode. This mode is
+    /// defined to be mode `0`. If the output devices support 80x50, that is defined to be mode `1`.
+    /// All other text dimensions supported by the device will follow as modes `2` and above. If an
+    /// output device supports modes `2` and above, but does not support `80x50`, then querying for
+    /// mode `1` will return [`EFI_UNSUPPORTED`].
+    ///
+    /// # Parameters
+    ///
+    /// ## `ModeNumber`
+    ///
+    /// The mode number to return information on.
+    ///
+    /// ## `Columns`, `Rows`
+    ///
+    /// Returns the geometry of the text output device for the requested [`ModeNumber`].
+    ///
+    /// ## Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - the requested mode information was returned.
+    ///
+    /// [`EFI_DEVICE_ERROR`] - the device had an error and could not complete the request.
+    /// reset.
+    ///
+    /// [`EFI_UNSUPPORTED`] - the mode number was not valid.
+    ///
+    /// [`QueryMode()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.QueryMode
+    /// [`EFI_UNSUPPORTED`]: crate::status::EFI_UNSUPPORTED
+    /// [`ModeNumber`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#modenumber
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
+    pub unsafe fn QueryMode(
+        &mut self,
+        ModeNumber: UINTN,
+        Columns: *mut UINTN,
+        Rows: *mut UINTN,
+    ) -> EFI_STATUS {
+        (self.QueryMode)(self, ModeNumber, Columns, Rows)
+    }
 }
 
 pub const BOXDRAW_HORIZONTAL: CHAR16 = 0x2500;
@@ -215,4 +260,11 @@ type EFI_TEXT_STRING = extern "efiapi" fn(
 type EFI_TEXT_TEST_STRING = extern "efiapi" fn(
     This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL,
     String: *mut CHAR16,
+) -> EFI_STATUS;
+
+type EFI_TEXT_QUERY_MODE = extern "efiapi" fn(
+    This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL,
+    ModeNumber: UINTN,
+    Columns: *mut UINTN,
+    Rows: *mut UINTN,
 ) -> EFI_STATUS;

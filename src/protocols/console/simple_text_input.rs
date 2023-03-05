@@ -64,6 +64,7 @@ impl EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
     /// ## Status Codes Returned
     ///
     /// [`EFI_SUCCESS`] - the device was reset.
+    ///
     /// [`EFI_DEVICE_ERROR`] - the device is not functioning correctly and could not be reset.
     ///
     /// [`Reset()`]: ./struct.EFI_SIMPLE_TEXT_INPUT_PROTOCOL.html#method.Reset
@@ -92,8 +93,11 @@ impl EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
     /// ## Status Codes Returned
     ///
     /// [`EFI_SUCCESS`] - the keystroke information was returned.
+    ///
     /// [`EFI_NOT_READY`] - there was no keystroke data available.
+    ///
     /// [`EFI_DEVICE_ERROR`] - the keystroke information was not returned due to hardware errors.
+    /// 
     /// [`EFI_UNSUPPORTED`] - the device does not support the ability to read keystroke data.
     ///
     /// [`ReadKeyStroke()`]: ./struct.EFI_SIMPLE_TEXT_INPUT_PROTOCOL.html#method.ReadKeyStroke

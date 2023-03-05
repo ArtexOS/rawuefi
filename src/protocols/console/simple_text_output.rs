@@ -40,6 +40,7 @@ pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     QueryMode: EFI_TEXT_QUERY_MODE,
     SetMode: EFI_TEXT_SET_MODE,
     SetAttribute: EFI_TEXT_SET_ATTRIBUTE,
+    ClearScreen: EFI_TEXT_CLEAR_SCREEN,
 }
 
 impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
@@ -226,6 +227,7 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     ///
     /// Devices supporting a different number of text colors are required to emulate the above colors to the best of the device’s capabilities.
     ///
+    /// [`SetAttribute()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.SetAttribute
     /// [`OutputString()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.OutputString
     /// [`ClearScreen()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.ClearScreen
     ///
@@ -241,8 +243,33 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     /// [`EFI_SUCCESS`] - the requested attributes were set.
     ///
     /// [`EFI_DEVICE_ERROR`] - the device had an error and could not complete the request.
+    ///
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
     pub unsafe fn SetAttribute(&mut self, Attribute: UINTN) -> EFI_STATUS {
         (self.SetAttribute)(self, Attribute)
+    }
+
+    /// Clears the output device(s) display to the currently selected background color.
+    ///
+    /// The [`ClearScreen()`] function clears the output device(s) display to the currently
+    /// selected background color. The cursor position is set to (0, 0).
+    ///
+    /// [`ClearScreen()`] ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.ClearScreen
+    ///
+    /// # Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - the requested attributes were set.
+    ///
+    /// [`EFI_DEVICE_ERROR`] - the device had an error and could not complete the request.
+    ///
+    /// [`EFI_UNSUPPORTED`] - the output device is not in a valid text mode.
+    ///
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
+    /// [`EFI_UNSUPPORTED`]: crate::status::EFI_UNSUPPORTED
+    pub unsafe fn ClearScreen(&mut self) -> EFI_STATUS {
+        (self.ClearScreen)(self)
     }
 }
 
@@ -359,3 +386,6 @@ type EFI_TEXT_SET_MODE =
 
 type EFI_TEXT_SET_ATTRIBUTE =
     extern "efiapi" fn(This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL, Attribute: UINTN) -> EFI_STATUS;
+
+type EFI_TEXT_CLEAR_SCREEN =
+    extern "efiapi" fn(This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL) -> EFI_STATUS;

@@ -1,6 +1,6 @@
 [package]
 name = "rawuefi"
-version = "0.1.4-dev.2"
+version = "0.1.4-dev.3"
 authors = [ "HTGAzureX1212." ]
 edition = "2021"
 rust-version = "1.69.0"

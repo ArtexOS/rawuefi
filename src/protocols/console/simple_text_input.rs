@@ -74,14 +74,45 @@ impl EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
         (self.Reset)(self, ExtendedVerification)
     }
 
+    /// Reads the next keystroke from the input device.
+    ///
+    /// The [`ReadKeyStroke()`] function reads the next keystroke from the input device. If there is no
+    /// pending keystroke the function returns [`EFI_NOT_READY`]. If there is a pending keystroke, then
+    /// ScanCode is the EFI scan code defined in EFI Scan Codes for [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`].
+    /// The UnicodeChar is the actual printable character or is zero if the key does not represent
+    /// a printable character (control key, function key, etc.).
+    ///
+    /// ## Parameters
+    ///
+    /// ### `Key`
+    ///
+    /// A pointer to a buffer that is filled in with the keystroke information for the key that was
+    /// pressed.
+    ///
+    /// ## Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - the keystroke information was returned.
+    /// [`EFI_NOT_READY`] - there was no keystroke data available.
+    /// [`EFI_DEVICE_ERROR`] - the keystroke information was not returned due to hardware errors.
+    /// [`EFI_UNSUPPORTED`] - the device does not support the ability to read keystroke data.
+    ///
+    /// [`ReadKeyStroke()`]: ./struct.EFI_SIMPLE_TEXT_INPUT_PROTOCOL.html#method.ReadKeyStroke
+    /// [`EFI_NOT_READY`]: crate::status::EFI_NOT_READY
+    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
+    /// [`EFI_UNSUPPORTED`]: crate::status::EFI_UNSUPPORTED
     pub unsafe fn ReadKeyStroke(&mut self, Key: *mut EFI_INPUT_KEY) -> EFI_STATUS {
         (self.ReadKeyStroke)(self, Key)
     }
 }
 
+/// A keystroke from the input device.
 #[repr(C)]
 pub struct EFI_INPUT_KEY {
+    /// The EFI scan code.
     pub ScanCode: UINT16,
+    /// The actual printable character or zero if it does not represent a printable character.
     pub UnicodeChar: CHAR16,
 }
 

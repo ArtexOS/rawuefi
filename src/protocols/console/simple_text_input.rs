@@ -64,14 +64,14 @@ impl EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
     /// The hardware verification process is not defined by this specification and is left up to the
     /// platform firmware or driver to implement.
     ///
-    /// ## Parameters
+    /// # Parameters
     ///
-    /// ### `ExtendedVerification`
+    /// ## `ExtendedVerification`
     ///
     /// Indicates that the driver may perform a more exhaustive verification operation of the device
     /// during reset.
     ///
-    /// ## Status Codes Returned
+    /// # Status Codes Returned
     ///
     /// [`EFI_SUCCESS`] - the device was reset.
     ///
@@ -92,14 +92,14 @@ impl EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
     /// The UnicodeChar is the actual printable character or is zero if the key does not represent
     /// a printable character (control key, function key, etc.).
     ///
-    /// ## Parameters
+    /// # Parameters
     ///
-    /// ### `Key`
+    /// ## `Key`
     ///
     /// A pointer to a buffer that is filled in with the keystroke information for the key that was
     /// pressed.
     ///
-    /// ## Status Codes Returned
+    /// # Status Codes Returned
     ///
     /// [`EFI_SUCCESS`] - the keystroke information was returned.
     ///

@@ -21,7 +21,7 @@
 //!
 //! [`EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
 
-use crate::types::{BOOLEAN, CHAR16, EFI_GUID, EFI_STATUS, UINTN};
+use crate::types::{BOOLEAN, CHAR16, EFI_GUID, EFI_STATUS, INT32, UINTN};
 
 /// GUID for the [`EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL`].
 ///
@@ -45,6 +45,7 @@ pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     ClearScreen: EFI_TEXT_CLEAR_SCREEN,
     SetCursorPosition: EFI_TEXT_SET_CURSOR_POSITION,
     EnableCursor: EFI_TEXT_ENABLE_CURSOR,
+    pub Mode: *mut SIMPLE_TEXT_OUTPUT_MODE
 }
 
 impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
@@ -333,6 +334,17 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     pub unsafe fn EnableCursor(&mut self, Visible: BOOLEAN) -> EFI_STATUS {
         (self.EnableCursor)(self, Visible)
     }
+}
+
+#[derive(Clone, Copy)]
+#[repr(C)]
+pub struct SIMPLE_TEXT_OUTPUT_MODE {
+    pub MaxMode: INT32,
+    pub Mode: INT32,
+    pub Attribute: INT32,
+    pub CursorColumn: INT32,
+    pub CursorRow: INT32,
+    pub CursorVisible: BOOLEAN,
 }
 
 pub const BOXDRAW_HORIZONTAL: CHAR16 = 0x2500;

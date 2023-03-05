@@ -21,7 +21,7 @@
 //!
 //! [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
 
-use crate::types::{BOOLEAN, EFI_STATUS};
+use crate::types::{BOOLEAN, CHAR16, EFI_EVENT, EFI_STATUS, UINT16};
 
 /// The Simple Text Input protocol defines the minimum input required to support the ConsoleIn device.
 ///
@@ -30,9 +30,67 @@ use crate::types::{BOOLEAN, EFI_STATUS};
 /// [`EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL`].
 ///
 /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
-pub struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
+#[repr(C)]
+pub struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
+    Reset: EFI_INPUT_RESET,
+    ReadKeyStroke: EFI_INPUT_READ_KEY_STROKE,
+    /// Event to use with [`EFI_BOOT_SERVICES.WaitForEvent()`] to wait for a key to be available.
+    pub WaitForKey: EFI_EVENT,
+}
 
-pub type EFI_INPUT_RESET = extern "efiapi" fn(
+impl EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
+    /// Resets the input device hardware.
+    ///
+    /// The [`Reset()`] function resets the input device hardware.
+    ///
+    /// The implementation of `Reset` is required to clear the contents of any input queues resident in
+    /// memory used for buffering keystroke data and put the input stream in a known empty state.
+    ///
+    /// As part of initialization process, the firmware/device will make a quick but reasonable attempt
+    /// to verify that the device is functioning. If the `ExtendedVerification` flag is `TRUE` the
+    /// firmware may take an extended amount of time to verify the device is operating on reset.
+    /// Otherwise the reset operation is to occur as quickly as possible.
+    ///
+    /// The hardware verification process is not defined by this specification and is left up to the
+    /// platform firmware or driver to implement.
+    ///
+    /// ## Parameters
+    ///
+    /// ### `ExtendedVerification`
+    ///
+    /// Indicates that the driver may perform a more exhaustive verification operation of the device
+    /// during reset.
+    ///
+    /// ## Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - the device was reset.
+    /// [`EFI_DEVICE_ERROR`] - the device is not functioning correctly and could not be reset.
+    ///
+    /// [`Reset()`]: ./struct.EFI_SIMPLE_TEXT_INPUT_PROTOCOL.html#method.Reset
+    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
+    pub unsafe fn Reset(&mut self, ExtendedVerification: BOOLEAN) -> EFI_STATUS {
+        (self.Reset)(self, ExtendedVerification)
+    }
+
+    pub unsafe fn ReadKeyStroke(&mut self, Key: *mut EFI_INPUT_KEY) -> EFI_STATUS {
+        (self.ReadKeyStroke)(self, Key)
+    }
+}
+
+#[repr(C)]
+pub struct EFI_INPUT_KEY {
+    pub ScanCode: UINT16,
+    pub UnicodeChar: CHAR16,
+}
+
+type EFI_INPUT_RESET = extern "efiapi" fn(
     This: *mut EFI_SIMPLE_TEXT_INPUT_PROTOCOL,
     ExtendedVerification: BOOLEAN,
+) -> EFI_STATUS;
+
+type EFI_INPUT_READ_KEY_STROKE = extern "efiapi" fn(
+    This: *mut EFI_SIMPLE_TEXT_INPUT_PROTOCOL,
+    Key: *mut EFI_INPUT_KEY,
 ) -> EFI_STATUS;

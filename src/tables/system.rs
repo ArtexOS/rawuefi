@@ -36,8 +36,9 @@
 //!
 //! [Section 4.3 of the UEFI Specification]: https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html#efi-system-table-1
 
+use crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
 use crate::tables::EFI_TABLE_HEADER;
-use crate::types::{CHAR16, UINT32, UINT64};
+use crate::types::{CHAR16, EFI_HANDLE, UINT32, UINT64};
 
 /// Signature for the EFI System Table.
 pub const EFI_SYSTEM_TABLE_SIGNATURE: UINT64 = 0x5453595320494249;
@@ -94,4 +95,16 @@ pub struct EFI_SYSTEM_TABLE {
     /// A firmware vendor specific value that identifies the revision of the system firmware for
     /// the platform.
     pub FirmwareRevision: UINT32,
+    /// The handle for the active console input device. This handle must support [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]
+    /// and [`EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL`]. If there is no active console, these protocols
+    /// must still be present.
+    ///
+    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+    pub ConsoleInHandle: EFI_HANDLE,
+    /// A pointer to the [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`] interface that is associated with
+    /// [`ConsoleInHandle`].
+    ///
+    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+    /// [`ConsoleInHandle`]: ./struct.EFI_SYSTEM_TABLE.html#structfield.ConsoleInHandle
+    pub ConIn: *mut EFI_SIMPLE_TEXT_INPUT_PROTOCOL,
 }

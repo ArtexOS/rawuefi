@@ -45,6 +45,9 @@ pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     ClearScreen: EFI_TEXT_CLEAR_SCREEN,
     SetCursorPosition: EFI_TEXT_SET_CURSOR_POSITION,
     EnableCursor: EFI_TEXT_ENABLE_CURSOR,
+    /// Pointer to [`SIMPLE_TEXT_OUTPUT_MODE`] data.
+    ///
+    /// [`SIMPLE_TEXT_OUTPUT_MODE`]: crate::protocols::console::simple_text_output::SIMPLE_TEXT_OUTPUT_MODE
     pub Mode: *mut SIMPLE_TEXT_OUTPUT_MODE
 }
 
@@ -339,11 +342,20 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
 #[derive(Clone, Copy)]
 #[repr(C)]
 pub struct SIMPLE_TEXT_OUTPUT_MODE {
+    /// The number of modes supported by [`QueryMode()`] and [`SetMode()`].
+    ///
+    /// [`QueryMode()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.QueryMode
+    /// [`SetMode()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.[`SetMode()`]
     pub MaxMode: INT32,
+    /// The text mode of the output device(s).
     pub Mode: INT32,
+    /// The current character output attribute.
     pub Attribute: INT32,
+    /// The cursor’s column.
     pub CursorColumn: INT32,
+    /// The cursor’s row.
     pub CursorRow: INT32,
+    /// The cursor is currently visible or not.
     pub CursorVisible: BOOLEAN,
 }
 

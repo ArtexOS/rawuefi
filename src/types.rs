@@ -156,21 +156,21 @@ pub type EFI_TPL = UINTN;
 /// 32-byte buffer containing a network Media Access Control address.
 #[repr(C)]
 pub struct EFI_MAC_ADDRESS {
-    pub Addr: [UINT8; 32]
+    pub Addr: [UINT8; 32],
 }
 
 /// 4-byte buffer. An IPv4 internet protocol address.
 #[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_IPv4_ADDRESS {
-    pub Addr: [UINT8; 4]
+    pub Addr: [UINT8; 4],
 }
 
 /// 16-byte buffer. An IPv6 internet protocol address.
 #[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_IPv6_ADDRESS {
-    pub Addr: [UINT8; 16]
+    pub Addr: [UINT8; 16],
 }
 
 /// 16-byte buffer aligned on a 4-byte boundary. An IPv4 or IPv6 internet protocol address.

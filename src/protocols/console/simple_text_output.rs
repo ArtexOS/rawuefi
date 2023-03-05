@@ -39,6 +39,7 @@ pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     TestString: EFI_TEXT_TEST_STRING,
     QueryMode: EFI_TEXT_QUERY_MODE,
     SetMode: EFI_TEXT_SET_MODE,
+    SetAttribute: EFI_TEXT_SET_ATTRIBUTE,
 }
 
 impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
@@ -170,7 +171,6 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     /// [`EFI_SUCCESS`] - the requested mode information was returned.
     ///
     /// [`EFI_DEVICE_ERROR`] - the device had an error and could not complete the request.
-    /// reset.
     ///
     /// [`EFI_UNSUPPORTED`] - the mode number was not valid.
     ///
@@ -205,7 +205,6 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     /// [`EFI_SUCCESS`] - the requested text mode was set.
     ///
     /// [`EFI_DEVICE_ERROR`] - the device had an error and could not complete the request.
-    /// reset.
     ///
     /// [`EFI_UNSUPPORTED`] - the mode number was not valid.
     ///
@@ -215,6 +214,35 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     /// [`EFI_UNSUPPORTED`]: crate::status::EFI_UNSUPPORTED
     pub unsafe fn SetMode(&mut self, ModeNumber: UINTN) -> EFI_STATUS {
         (self.SetMode)(self, ModeNumber)
+    }
+
+    /// Sets the background and foreground colors for the [`OutputString()`], and [`ClearScreen()`]
+    /// functions.
+    ///
+    /// The [`SetAttribute()`] function sets the background and foreground colors for the [`OutputString()`]
+    /// and [`ClearScreen()`] functions.
+    ///
+    /// The color mask can be set even when the device is in an invalid text mode.
+    ///
+    /// Devices supporting a different number of text colors are required to emulate the above colors to the best of the device’s capabilities.
+    ///
+    /// [`OutputString()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.OutputString
+    /// [`ClearScreen()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.ClearScreen
+    ///
+    /// # Parameters
+    ///
+    /// ## `Attribute`
+    ///
+    /// The attribute to set. Bits `0..3` are the foreground color, and bits `4..6` are the background
+    /// color. All other bits are reserved.
+    ///
+    /// # Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - the requested attributes were set.
+    ///
+    /// [`EFI_DEVICE_ERROR`] - the device had an error and could not complete the request.
+    pub unsafe fn SetAttribute(&mut self, Attribute: UINTN) -> EFI_STATUS {
+        (self.SetAttribute)(self, Attribute)
     }
 }
 
@@ -277,6 +305,33 @@ pub const GEOMETRICSHAPE_LEFT_TRIANGLE: CHAR16 = 0x25C4;
 pub const ARROW_UP: CHAR16 = 0x2191;
 pub const ARROW_DOWN: CHAR16 = 0x2193;
 
+pub const EFI_BLACK: UINTN = 0x00;
+pub const EFI_BLUE: UINTN = 0x01;
+pub const EFI_GREEN: UINTN = 0x02;
+pub const EFI_CYAN: UINTN = 0x03;
+pub const EFI_RED: UINTN = 0x04;
+pub const EFI_MAGENTA: UINTN = 0x05;
+pub const EFI_BROWN: UINTN = 0x06;
+pub const EFI_LIGHTGRAY: UINTN = 0x07;
+pub const EFI_BRIGHT: UINTN = 0x08;
+pub const EFI_DARKGRAY: UINTN = 0x08;
+pub const EFI_LIGHTBLUE: UINTN = 0x09;
+pub const EFI_LIGHTGREEN: UINTN = 0x0A;
+pub const EFI_LIGHTCYAN: UINTN = 0x0B;
+pub const EFI_LIGHTRED: UINTN = 0x0C;
+pub const EFI_LIGHTMAGENTA: UINTN = 0x0D;
+pub const EFI_YELLOW: UINTN = 0x0E;
+pub const EFI_WHITE: UINTN = 0x0F;
+
+pub const EFI_BACKGROUND_BLACK: UINTN = 0x00;
+pub const EFI_BACKGROUND_BLUE: UINTN = 0x10;
+pub const EFI_BACKGROUND_GREEN: UINTN = 0x20;
+pub const EFI_BACKGROUND_CYAN: UINTN = 0x30;
+pub const EFI_BACKGROUND_RED: UINTN = 0x40;
+pub const EFI_BACKGROUND_MAGENTA: UINTN = 0x50;
+pub const EFI_BACKGROUND_BROWN: UINTN = 0x60;
+pub const EFI_BACKGROUND_LIGHTGRAY: UINTN = 0x70;
+
 type EFI_TEXT_RESET = extern "efiapi" fn(
     This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL,
     ExtendedVerification: BOOLEAN,
@@ -299,7 +354,8 @@ type EFI_TEXT_QUERY_MODE = extern "efiapi" fn(
     Rows: *mut UINTN,
 ) -> EFI_STATUS;
 
-type EFI_TEXT_SET_MODE = extern "efiapi" fn(
-    This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL,
-    ModeNumber: UINTN,
-) -> EFI_STATUS;
+type EFI_TEXT_SET_MODE =
+    extern "efiapi" fn(This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL, ModeNumber: UINTN) -> EFI_STATUS;
+
+type EFI_TEXT_SET_ATTRIBUTE =
+    extern "efiapi" fn(This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL, Attribute: UINTN) -> EFI_STATUS;

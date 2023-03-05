@@ -178,7 +178,38 @@ impl EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
     pub unsafe fn SetState(&mut self, KeyToggleState: *mut EFI_KEY_TOGGLE_STATE) -> EFI_STATUS {
         (self.SetState)(self, KeyToggleState)
     }
-    
+
+    /// Register a notification function for a particular keystroke for the input device.
+    ///
+    /// The [`RegisterKeyNotify()`] function registers a function which will be called when a
+    /// specified keystroke will occur. The keystroke being specified can be for any combination
+    /// of [`KeyData.Key`] or [`KeyData.KeyState`] information.
+    ///
+    /// # Parameters
+    ///
+    /// ## `KeyData`
+    ///
+    /// A pointer to a buffer that is filled in with the keystroke information for the key that was
+    /// pressed. If [`KeyData.Key`], [`KeyData.KeyState.KeyToggleState`] and [`KeyData.KeyState.KeyShiftState`]
+    /// are 0, then any incomplete keystroke will trigger a notification of the
+    /// [`KeyNotificationFunction`].
+    ///
+    /// ## `KeyNotificationFunction`
+    ///
+    /// Points to the function to be called when the key sequence is typed specified by [`KeyData`].
+    /// This notification function should be called at <= [`TPL_CALLBACK`]
+    ///
+    /// ## `NotifyHandle`
+    ///
+    /// Points to the unique handle assigned to the registered notification.
+    ///
+    /// [`RegisterKeyNotify()`]: ./struct.EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.html#method.RegisterKeyNotify
+    /// [`KeyData.Key`]: ./struct.EFI_KEY_DATA.html#structfield.Key
+    /// [`KeyData.KeyState`]: ./struct.EFI_KEY_DATA.html#structfield.KeyState
+    /// [`KeyData.KeyState.KeyToggleState`]: ./struct.EFI_KEY_STATE.html#structfield.KeyToggleState
+    /// [`KeyData.KeyState.KeyShiftState`]: ./struct.EFI_KEY_STATE.html#structfield.KeyShiftState
+    /// [`KeyData`]: ./struct.EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.html#keydata-1
+    /// [`KeyNotificationFunction`]: ./struct.EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.html#keynotificationfunction
     pub unsafe fn RegisterKeyNotify(
         &mut self,
         KeyData: *mut EFI_KEY_DATA,

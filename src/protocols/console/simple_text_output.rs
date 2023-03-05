@@ -38,6 +38,7 @@ pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     OutputString: EFI_TEXT_STRING,
     TestString: EFI_TEXT_TEST_STRING,
     QueryMode: EFI_TEXT_QUERY_MODE,
+    SetMode: EFI_TEXT_SET_MODE,
 }
 
 impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
@@ -186,6 +187,35 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     ) -> EFI_STATUS {
         (self.QueryMode)(self, ModeNumber, Columns, Rows)
     }
+
+    /// Sets the output device(s) to a specified mode.
+    ///
+    /// The [`SetMode()`] function sets the output device(s) to the requested mode. On success
+    /// the device is in the geometry for the requested mode, and the device has been cleared to
+    /// the current background color with the cursor at (0,0).
+    ///
+    /// # Parameters
+    ///
+    /// ## `ModeNumber`
+    ///
+    /// The text mode to set.
+    ///
+    /// ## Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - the requested text mode was set.
+    ///
+    /// [`EFI_DEVICE_ERROR`] - the device had an error and could not complete the request.
+    /// reset.
+    ///
+    /// [`EFI_UNSUPPORTED`] - the mode number was not valid.
+    ///
+    /// [`SetMode()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.SetMode
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
+    /// [`EFI_UNSUPPORTED`]: crate::status::EFI_UNSUPPORTED
+    pub unsafe fn SetMode(&mut self, ModeNumber: UINTN) -> EFI_STATUS {
+        (self.SetMode)(self, ModeNumber)
+    }
 }
 
 pub const BOXDRAW_HORIZONTAL: CHAR16 = 0x2500;
@@ -267,4 +297,9 @@ type EFI_TEXT_QUERY_MODE = extern "efiapi" fn(
     ModeNumber: UINTN,
     Columns: *mut UINTN,
     Rows: *mut UINTN,
+) -> EFI_STATUS;
+
+type EFI_TEXT_SET_MODE = extern "efiapi" fn(
+    This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL,
+    ModeNumber: UINTN,
 ) -> EFI_STATUS;

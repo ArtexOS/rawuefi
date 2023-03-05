@@ -99,12 +99,13 @@ pub struct EFI_SYSTEM_TABLE {
     /// and [`EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL`]. If there is no active console, these protocols
     /// must still be present.
     ///
-    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+    /// [`EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL
     pub ConsoleInHandle: EFI_HANDLE,
     /// A pointer to the [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`] interface that is associated with
     /// [`ConsoleInHandle`].
     ///
-    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
     /// [`ConsoleInHandle`]: ./struct.EFI_SYSTEM_TABLE.html#structfield.ConsoleInHandle
     pub ConIn: *mut EFI_SIMPLE_TEXT_INPUT_PROTOCOL,
 }

@@ -55,6 +55,7 @@ pub mod system;
 /// [`EFI_TABLE_HEADER`]: crate::tables::EFI_TABLE_HEADER
 /// [`HeaderSize`]: ./struct.EFI_TABLE_HEADER.html#structfield.HeaderSize
 /// [`Revision`]: ./struct.EFI_TABLE_HEADER.html#structfield.Revision
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_TABLE_HEADER {
     /// A 64-bit signature that identifies the type of table that follows. Unique signatures have

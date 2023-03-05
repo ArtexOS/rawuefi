@@ -33,6 +33,8 @@ pub const EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_GUID: EFI_GUID = EFI_GUID(
     [0x8E, 0x39, 0x00, 0xA0, 0xC9, 0x69, 0x72, 0x3B],
 );
 
+#[derive(Clone, Copy)]
+#[repr(C)]
 pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     Reset: EFI_TEXT_RESET,
     OutputString: EFI_TEXT_STRING,
@@ -42,6 +44,7 @@ pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     SetAttribute: EFI_TEXT_SET_ATTRIBUTE,
     ClearScreen: EFI_TEXT_CLEAR_SCREEN,
     SetCursorPosition: EFI_TEXT_SET_CURSOR_POSITION,
+    EnableCursor: EFI_TEXT_ENABLE_CURSOR,
 }
 
 impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
@@ -303,6 +306,33 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     pub unsafe fn SetCursorPosition(&mut self, Column: UINTN, Row: UINTN) -> EFI_STATUS {
         (self.SetCursorPosition)(self, Column, Row)
     }
+
+    /// Makes the cursor visible or invisible.
+    ///
+    /// The [`EnableCursor()`] function makes the cursor visible or invisible.
+    ///
+    /// # Parameters
+    ///
+    /// ## `Visible`
+    ///
+    /// If `TRUE`, the cursor is set to be visible. If `FALSE`, the cursor is set to be invisible.
+    ///
+    /// # Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - the operation completed successfully.
+    ///
+    /// [`EFI_DEVICE_ERROR`] - the device had an error and could not complete the request or the
+    /// device does not support changing the cursor mode.
+    ///
+    /// [`EFI_UNSUPPORTED`] - the output device does not support visibility control of the cursor.
+    ///
+    /// [`EnableCursor()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.EnableCursor
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
+    /// [`EFI_UNSUPPORTED`]: crate::status::EFI_UNSUPPORTED
+    pub unsafe fn EnableCursor(&mut self, Visible: BOOLEAN) -> EFI_STATUS {
+        (self.EnableCursor)(self, Visible)
+    }
 }
 
 pub const BOXDRAW_HORIZONTAL: CHAR16 = 0x2500;
@@ -427,3 +457,6 @@ type EFI_TEXT_SET_CURSOR_POSITION = extern "efiapi" fn(
     Column: UINTN,
     Row: UINTN,
 ) -> EFI_STATUS;
+
+type EFI_TEXT_ENABLE_CURSOR =
+    extern "efiapi" fn(This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL, Visible: BOOLEAN) -> EFI_STATUS;

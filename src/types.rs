@@ -135,6 +135,7 @@ pub enum VOID {}
 // ----- BEGIN COMPOUND TYPES -----
 
 /// 128-bit buffer containing a unique identifier value. Unless otherwise specified, aligned on a 64-bit boundary.
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_GUID(pub UINT32, pub UINT16, pub UINT16, pub [UINT8; 8]);
 
@@ -154,6 +155,7 @@ pub type EFI_LBA = UINT64;
 pub type EFI_TPL = UINTN;
 
 /// 32-byte buffer containing a network Media Access Control address.
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_MAC_ADDRESS {
     pub Addr: [UINT8; 32],
@@ -174,6 +176,7 @@ pub struct EFI_IPv6_ADDRESS {
 }
 
 /// 16-byte buffer aligned on a 4-byte boundary. An IPv4 or IPv6 internet protocol address.
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub union EFI_IP_ADDRESS {
     pub IPv4: EFI_IPv4_ADDRESS,

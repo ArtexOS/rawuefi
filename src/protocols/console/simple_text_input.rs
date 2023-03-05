@@ -41,6 +41,7 @@ pub const EFI_SIMPLE_TEXT_INPUT_PROTOCOL_GUID: EFI_GUID = EFI_GUID(
 ///
 /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
 /// [`EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
     Reset: EFI_INPUT_RESET,
@@ -123,6 +124,7 @@ impl EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
 }
 
 /// A keystroke from the input device.
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_INPUT_KEY {
     /// The EFI scan code.

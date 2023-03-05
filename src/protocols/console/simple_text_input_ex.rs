@@ -42,6 +42,7 @@ pub const EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_GUID: EFI_GUID = EFI_GUID(
 ///
 /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
 /// [`EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
     Reset: EFI_INPUT_RESET_EX,
@@ -266,6 +267,7 @@ impl EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
 }
 
 /// Keystroke state data for the key that was pressed.
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_KEY_DATA {
     /// The EFI scan code and Unicode value returned from the input device.
@@ -275,6 +277,7 @@ pub struct EFI_KEY_DATA {
 }
 
 /// Current state of various toggled attributes as well as input modifier values.
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_KEY_STATE {
     /// Reflects the currently pressed shift modifiers for the input device. The returned value is

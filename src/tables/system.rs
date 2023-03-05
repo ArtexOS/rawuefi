@@ -78,6 +78,7 @@ pub const EFI_SPECIFICATION_VERSION: UINT32 = EFI_SYSTEM_TABLE_REVISION;
 pub const EFI_SYSTEM_TABLE_REVISION: UINT32 = EFI_2_100_SYSTEM_TABLE_REVISION;
 
 /// Contains pointers to the runtime and boot services tables.
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_SYSTEM_TABLE {
     /// The table header for the EFI System Table. This header contains the

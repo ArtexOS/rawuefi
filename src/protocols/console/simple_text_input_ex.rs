@@ -21,7 +21,17 @@
 //! [`EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL`].
 
 use crate::protocols::console::simple_text_input::EFI_INPUT_KEY;
-use crate::types::{BOOLEAN, EFI_STATUS, UINT32, UINT8, VOID};
+use crate::types::{BOOLEAN, EFI_GUID, EFI_STATUS, UINT32, UINT8, VOID};
+
+/// GUID for the [`EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL`].
+///
+/// [`EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL
+pub const EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_GUID: EFI_GUID = EFI_GUID(
+    0xDD9E7534,
+    0x7762,
+    0x4698,
+    [0x8C, 0x14, 0xF5, 0x85, 0x17, 0xA6, 0x25, 0xAA],
+);
 
 /// The Simple Text Input Ex protocol defines an extension to the Simple Text Input protocol
 /// which enables various new capabilities

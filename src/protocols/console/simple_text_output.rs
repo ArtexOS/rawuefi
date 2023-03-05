@@ -48,7 +48,7 @@ pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     /// Pointer to [`SIMPLE_TEXT_OUTPUT_MODE`] data.
     ///
     /// [`SIMPLE_TEXT_OUTPUT_MODE`]: crate::protocols::console::simple_text_output::SIMPLE_TEXT_OUTPUT_MODE
-    pub Mode: *mut SIMPLE_TEXT_OUTPUT_MODE
+    pub Mode: *mut SIMPLE_TEXT_OUTPUT_MODE,
 }
 
 impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {

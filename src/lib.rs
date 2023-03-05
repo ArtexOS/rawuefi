@@ -36,5 +36,6 @@
 #![allow(non_snake_case)]
 
 pub mod protocols;
+pub mod status;
 pub mod tables;
 pub mod types;

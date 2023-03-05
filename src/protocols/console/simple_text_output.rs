@@ -109,6 +109,35 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
         (self.OutputString)(self, String)
     }
 
+    /// Verifies that all characters in a string can be output to the target device.
+    ///
+    /// The [`TestString()`] function verifies that all characters in a string can be output to the
+    /// target device.
+    ///
+    /// This function provides a way to know if the desired character codes are supported for
+    /// rendering on the output device(s). This allows the installation procedure (or EFI image) to
+    /// at least select character codes that the output devices are capable of displaying. Since
+    /// the output device(s) may be changed between boots, if the loader cannot adapt to such
+    /// changes it is recommended that the loader call [`OutputString()`] with the text it has and
+    /// ignore any `UNSUPPORTED` error codes. Devices that are capable of displaying the Unicode
+    /// character codes will do so.
+    ///
+    /// # Parameters
+    ///
+    /// ## `String`
+    ///
+    /// The null-terminated string to be examined for the output device(s).
+    ///
+    /// # Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - the string was output to the device.
+    ///
+    /// [`EFI_UNSUPPORTED`] - the output device’s mode is not currently in a defined text mode.
+    ///
+    /// [`TestString()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.TestString
+    /// [`OutputString()`]: ./struct.EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.html#method.OutputString
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_UNSUPPORTED`]: crate::status::EFI_UNSUPPORTED
     pub unsafe fn TestString(&mut self, String: *mut CHAR16) -> EFI_STATUS {
         (self.TestString)(self, String)
     }

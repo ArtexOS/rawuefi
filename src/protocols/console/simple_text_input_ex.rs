@@ -37,6 +37,7 @@ pub struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
     ReadKeyStrokeEx: EFI_INPUT_READ_KEY_EX,
     SetState: EFI_SET_STATE,
     RegisterKeyNotify: EFI_REGISTER_KEYSTROKE_NOTIFY,
+    UnregisterKeyNotify: EFI_UNREGISTER_KEYSTROKE_NOTIFY,
 }
 
 impl EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
@@ -203,6 +204,12 @@ impl EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
     ///
     /// Points to the unique handle assigned to the registered notification.
     ///
+    ///  # Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - key notify was registered successfully.
+    ///
+    /// [`EFI_OUT_OF_RESOURCES`] - unable to allocate necessary data structures.
+    ///
     /// [`RegisterKeyNotify()`]: ./struct.EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.html#method.RegisterKeyNotify
     /// [`KeyData.Key`]: ./struct.EFI_KEY_DATA.html#structfield.Key
     /// [`KeyData.KeyState`]: ./struct.EFI_KEY_DATA.html#structfield.KeyState
@@ -210,6 +217,8 @@ impl EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
     /// [`KeyData.KeyState.KeyShiftState`]: ./struct.EFI_KEY_STATE.html#structfield.KeyShiftState
     /// [`KeyData`]: ./struct.EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.html#keydata-1
     /// [`KeyNotificationFunction`]: ./struct.EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.html#keynotificationfunction
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_OUT_OF_RESOURCES`]: crate::status::EFI_OUT_OF_RESOURCES
     pub unsafe fn RegisterKeyNotify(
         &mut self,
         KeyData: *mut EFI_KEY_DATA,
@@ -218,9 +227,35 @@ impl EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
     ) -> EFI_STATUS {
         (self.RegisterKeyNotify)(self, KeyData, KeyNotificationFunction, NotifyHandle)
     }
+
+    /// Remove the notification that was previously registered.
+    ///
+    /// The [`UnregisterKeystrokeNotify()`] function removes the notification which was previously
+    /// registered.
+    ///
+    /// # Parameters
+    ///
+    /// ## `NotificationHandle`
+    ///
+    /// The handle of the notification function being unregistered.
+    ///
+    /// # Status Codes Returned
+    ///
+    /// [`EFI_SUCCESS`] - key notify was unregistered successfully.
+    ///
+    /// [`EFI_INVALID_PARAMETER`] - the [`NotificationHandle`] is invalid.
+    ///
+    /// [`UnregisterKeystrokeNotify()`]: ./struct.EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.html#method.UnregisterKeystrokeNotify
+    /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
+    /// [`EFI_INVALID_PARAMETER`]: crate::status::EFI_INVALID_PARAMETER
+    /// [`NotificationHandle`]: ./struct.EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.html#notificationhandle
+    pub unsafe fn UnregisterKeyNotify(&mut self, NotificationHandle: *mut VOID) -> EFI_STATUS {
+        (self.UnregisterKeyNotify)(self, NotificationHandle)
+    }
 }
 
 /// Keystroke state data for the key that was pressed.
+#[repr(C)]
 pub struct EFI_KEY_DATA {
     /// The EFI scan code and Unicode value returned from the input device.
     pub Key: EFI_INPUT_KEY,
@@ -229,6 +264,7 @@ pub struct EFI_KEY_DATA {
 }
 
 /// Current state of various toggled attributes as well as input modifier values.
+#[repr(C)]
 pub struct EFI_KEY_STATE {
     /// Reflects the currently pressed shift modifiers for the input device. The returned value is
     /// valid only if the high order bit has been set.
@@ -282,4 +318,9 @@ type EFI_REGISTER_KEYSTROKE_NOTIFY = extern "efiapi" fn(
     KeyData: *mut EFI_KEY_DATA,
     KeyNotificationFunction: EFI_KEY_NOTIFY_FUNCTION,
     NotifyHandle: *mut *mut VOID,
+) -> EFI_STATUS;
+
+type EFI_UNREGISTER_KEYSTROKE_NOTIFY = extern "efiapi" fn(
+    This: *mut EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL,
+    NotificationHandle: *mut VOID,
 ) -> EFI_STATUS;

@@ -36,6 +36,7 @@ pub const EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_GUID: EFI_GUID = EFI_GUID(
 pub struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     Reset: EFI_TEXT_RESET,
     OutputString: EFI_TEXT_STRING,
+    TestString: EFI_TEXT_TEST_STRING,
 }
 
 impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
@@ -107,6 +108,10 @@ impl EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     pub unsafe fn OutputString(&mut self, String: *mut CHAR16) -> EFI_STATUS {
         (self.OutputString)(self, String)
     }
+
+    pub unsafe fn TestString(&mut self, String: *mut CHAR16) -> EFI_STATUS {
+        (self.TestString)(self, String)
+    }
 }
 
 pub const BOXDRAW_HORIZONTAL: CHAR16 = 0x2500;
@@ -174,6 +179,11 @@ type EFI_TEXT_RESET = extern "efiapi" fn(
 ) -> EFI_STATUS;
 
 type EFI_TEXT_STRING = extern "efiapi" fn(
+    This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL,
+    String: *mut CHAR16,
+) -> EFI_STATUS;
+
+type EFI_TEXT_TEST_STRING = extern "efiapi" fn(
     This: *mut EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL,
     String: *mut CHAR16,
 ) -> EFI_STATUS;

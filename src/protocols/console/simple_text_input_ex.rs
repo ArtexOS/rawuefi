@@ -21,7 +21,7 @@
 //! [`EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL`].
 
 use crate::protocols::console::simple_text_input::EFI_INPUT_KEY;
-use crate::types::{BOOLEAN, EFI_STATUS, UINT32, UINT8};
+use crate::types::{BOOLEAN, EFI_STATUS, UINT32, UINT8, VOID};
 
 /// The Simple Text Input Ex protocol defines an extension to the Simple Text Input protocol
 /// which enables various new capabilities
@@ -36,6 +36,7 @@ pub struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
     Reset: EFI_INPUT_RESET_EX,
     ReadKeyStrokeEx: EFI_INPUT_READ_KEY_EX,
     SetState: EFI_SET_STATE,
+    RegisterKeyNotify: EFI_REGISTER_KEYSTROKE_NOTIFY,
 }
 
 impl EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
@@ -177,6 +178,15 @@ impl EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
     pub unsafe fn SetState(&mut self, KeyToggleState: *mut EFI_KEY_TOGGLE_STATE) -> EFI_STATUS {
         (self.SetState)(self, KeyToggleState)
     }
+    
+    pub unsafe fn RegisterKeyNotify(
+        &mut self,
+        KeyData: *mut EFI_KEY_DATA,
+        KeyNotificationFunction: EFI_KEY_NOTIFY_FUNCTION,
+        NotifyHandle: *mut *mut VOID,
+    ) -> EFI_STATUS {
+        (self.RegisterKeyNotify)(self, KeyData, KeyNotificationFunction, NotifyHandle)
+    }
 }
 
 /// Keystroke state data for the key that was pressed.
@@ -217,6 +227,10 @@ pub const EFI_SCROLL_LOCK_ACTIVE: EFI_KEY_TOGGLE_STATE = 0x01;
 pub const EFI_NUM_LOCK_ACTIVE: EFI_KEY_TOGGLE_STATE = 0x02;
 pub const EFI_CAPS_LOCK_ACTIVE: EFI_KEY_TOGGLE_STATE = 0x04;
 
+pub type EFI_KEY_NOTIFY_FUNCTION = extern "efiapi" fn(
+    KeyData: *mut EFI_KEY_DATA,
+) -> EFI_STATUS;
+
 type EFI_INPUT_RESET_EX = extern "efiapi" fn(
     This: *mut EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL,
     ExtendedVerification: BOOLEAN,
@@ -230,4 +244,11 @@ type EFI_INPUT_READ_KEY_EX = extern "efiapi" fn(
 type EFI_SET_STATE = extern "efiapi" fn(
     This: *mut EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL,
     KeyToggleState: *mut EFI_KEY_TOGGLE_STATE,
+) -> EFI_STATUS;
+
+type EFI_REGISTER_KEYSTROKE_NOTIFY = extern "efiapi" fn(
+    This: *mut EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL,
+    KeyData: *mut EFI_KEY_DATA,
+    KeyNotificationFunction: EFI_KEY_NOTIFY_FUNCTION,
+    NotifyHandle: *mut *mut VOID,
 ) -> EFI_STATUS;

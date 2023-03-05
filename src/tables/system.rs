@@ -36,7 +36,7 @@
 //!
 //! [Section 4.3 of the UEFI Specification]: https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html#efi-system-table-1
 
-use crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
+use crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
 use crate::tables::EFI_TABLE_HEADER;
 use crate::types::{CHAR16, EFI_HANDLE, UINT32, UINT64};
 

@@ -19,7 +19,7 @@
 //!
 //! This module defines the Simple Text Input Protocol, also known as the [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`].
 //!
-//! [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+//! [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
 
 use crate::types::{BOOLEAN, CHAR16, EFI_EVENT, EFI_STATUS, UINT16};
 
@@ -29,7 +29,7 @@ use crate::types::{BOOLEAN, CHAR16, EFI_EVENT, EFI_STATUS, UINT16};
 /// that the [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`] supports the same languages as the corresponding
 /// [`EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL`].
 ///
-/// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+/// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
 #[repr(C)]
 pub struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
     Reset: EFI_INPUT_RESET,
@@ -68,7 +68,7 @@ impl EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
     /// [`EFI_DEVICE_ERROR`] - the device is not functioning correctly and could not be reset.
     ///
     /// [`Reset()`]: ./struct.EFI_SIMPLE_TEXT_INPUT_PROTOCOL.html#method.Reset
-    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
     /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
     /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
     pub unsafe fn Reset(&mut self, ExtendedVerification: BOOLEAN) -> EFI_STATUS {
@@ -97,12 +97,12 @@ impl EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
     /// [`EFI_NOT_READY`] - there was no keystroke data available.
     ///
     /// [`EFI_DEVICE_ERROR`] - the keystroke information was not returned due to hardware errors.
-    /// 
+    ///
     /// [`EFI_UNSUPPORTED`] - the device does not support the ability to read keystroke data.
     ///
     /// [`ReadKeyStroke()`]: ./struct.EFI_SIMPLE_TEXT_INPUT_PROTOCOL.html#method.ReadKeyStroke
     /// [`EFI_NOT_READY`]: crate::status::EFI_NOT_READY
-    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
+    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
     /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
     /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
     /// [`EFI_UNSUPPORTED`]: crate::status::EFI_UNSUPPORTED

@@ -24,5 +24,10 @@
 //! | Protocol            | Definition in Module               |
 //! | ------------------- | ---------------------------------- |
 //! | [Simple Text Input] | [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`] |
+//!
+//! [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
 
 pub mod simple_text_input;
+pub mod simple_text_input_ex;
+
+pub use simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL;

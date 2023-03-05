@@ -78,7 +78,6 @@ impl EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
     /// [`EFI_DEVICE_ERROR`] - the device is not functioning correctly and could not be reset.
     ///
     /// [`Reset()`]: ./struct.EFI_SIMPLE_TEXT_INPUT_PROTOCOL.html#method.Reset
-    /// [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
     /// [`EFI_SUCCESS`]: crate::status::EFI_SUCCESS
     /// [`EFI_DEVICE_ERROR`]: crate::status::EFI_DEVICE_ERROR
     pub unsafe fn Reset(&mut self, ExtendedVerification: BOOLEAN) -> EFI_STATUS {

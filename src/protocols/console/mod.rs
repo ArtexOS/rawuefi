@@ -21,9 +21,10 @@
 //! Simple Pointer, Serial IO, and Graphics Output protocols. These are correspondingly defined in
 //! this module as follows:
 //!
-//! | Protocol            | Definition in Module               |
-//! | ------------------- | ---------------------------------- |
-//! | [Simple Text Input] | [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`] |
+//! | Protocol             | Definition in Module                  |
+//! | -------------------- | ------------------------------------- |
+//! | Simple Text Input    | [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]    |
+//! | Simple Text Input Ex | [`EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL`] |
 //!
 //! [`EFI_SIMPLE_TEXT_INPUT_PROTOCOL`]: crate::protocols::console::EFI_SIMPLE_TEXT_INPUT_PROTOCOL
 
@@ -31,3 +32,4 @@ pub mod simple_text_input;
 pub mod simple_text_input_ex;
 
 pub use simple_text_input::EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
+pub use simple_text_input_ex::EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL;

@@ -34,6 +34,7 @@
 
 use crate::types::{UINT32, UINT64};
 
+pub mod runtime_services;
 pub mod system;
 
 /// Data structure that precedes all of the standard EFI table types.

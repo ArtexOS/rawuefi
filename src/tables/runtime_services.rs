@@ -28,7 +28,7 @@
 
 use crate::tables::EFI_TABLE_HEADER;
 use crate::tables::system::EFI_SPECIFICATION_VERSION;
-use crate::types::{UINT32, UINT64};
+use crate::types::{BOOLEAN, EFI_STATUS, UINT16, UINT32, UINT64, UINT8};
 
 /// Signature for the EFI Runtime Services Table.
 pub const EFI_RUNTIME_SERVICES_SIGNATURE: UINT64 = 0x56524553544e5552;
@@ -37,6 +37,7 @@ pub const EFI_RUNTIME_SERVICES_SIGNATURE: UINT64 = 0x56524553544e5552;
 pub const EFI_RUNTIME_SERVICES_REVISION: UINT32 = EFI_SPECIFICATION_VERSION;
 
 /// Contains a table header and pointers to all of the runtime services.
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct EFI_RUNTIME_SERVICES {
     /// The table header for the EFI Runtime Services Table. This header contains the
@@ -48,4 +49,82 @@ pub struct EFI_RUNTIME_SERVICES {
     /// [`EFI_RUNTIME_SERVICES_REVISION`]: crate::tables::runtime_services::EFI_RUNTIME_SERVICES_REVISION
     /// [`EFI_RUNTIME_SERVICES`]: crate::tables::runtime_services::EFI_RUNTIME_SERVICES
     pub Hdr: EFI_TABLE_HEADER,
+
+    GetTime: EFI_GET_TIME,
 }
+
+/// Represents current time information.
+#[derive(Clone, Copy)]
+#[repr(C)]
+pub struct EFI_TIME {
+    /// The year of the current local date.
+    pub Year: UINT16,
+    /// The month of the current local date.
+    pub Month: UINT8,
+    /// The day of the current local date.
+    pub Day: UINT8,
+    /// The hour of the current local time.
+    pub Hour: UINT8,
+    /// The minute of the current local time.
+    pub Minute: UINT8,
+    /// The second of the current local time.
+    pub Second: UINT8,
+    Pad1: UINT8,
+    /// Nanoseconds report the current fraction of a second in the device.
+    pub Nanosecond: UINT32,
+    /// The time’s offset in minutes from UTC. If the value is [`EFI_UNSPECIFIED_TIMEZONE`], then the
+    /// time is interpreted as a local time. The [`TimeZone`] is the number of minutes that the
+    /// local time is relative to UTC. To calculate the [`TimeZone`] value, follow this equation:
+    /// Localtime = UTC - TimeZone.
+    ///
+    /// [`EFI_UNSPECIFIED_TIMEZONE`]: crate::tables::runtime_services::EFI_UNSPECIFIED_TIMEZONE
+    /// [`TimeZone`]: ./struct.EFI_TIME.html#structfield.TimeZone
+    pub TimeZone: UINT16,
+    /// A bitmask containing the daylight savings time information for the time.
+    ///
+    /// The [`EFI_TIME_ADJUST_DAYLIGHT`] bit indicates if the time is affected by daylight savings
+    /// time or not. This value does not indicate that the time has been adjusted for daylight
+    /// savings time. It indicates only that it should be adjusted when the [`EFI_TIME`] enters
+    /// daylight savings time.
+    ///
+    /// If [`EFI_TIME_IN_DAYLIGHT`] is set, the time has been adjusted for daylight savings time.
+    ///
+    /// All other bits must be zero.
+    ///
+    /// [`EFI_TIME_ADJUST_DAYLIGHT`]: crate::tables::runtime_services::EFI_TIME_ADJUST_DAYLIGHT
+    /// [`EFI_TIME`]: crate::tables::runtime_services::EFI_TIME
+    /// [`EFI_TIME_IN_DAYLIGHT`]: crate::tables::runtime_services::EFI_TIME_IN_DAYLIGHT
+    pub Daylight: UINT8,
+    Pad2: UINT8,
+}
+
+/// This provides the capabilities of the real time clock device as exposed through EFI.
+#[derive(Clone, Copy)]
+#[repr(C)]
+pub struct EFI_TIME_CAPABILITIES {
+    /// Provides the reporting resolution of the real-time clock device in counts per second. For a
+    /// normal PC-AT CMOS RTC device, this value would be 1 Hz, or 1, to indicate that the device
+    /// only reports the time to the resolution of 1 second.
+    pub Resolution: UINT32,
+    /// Provides the timekeeping accuracy of the real-time clock in an error rate of 1E-6 parts
+    /// per million. For a clock with an accuracy of 50 parts per million, the value in this
+    /// field would be `50_000_000`.
+    pub Accuracy: UINT32,
+    /// A `TRUE` indicates that a time set operation clears the device’s time below the [`Resolution`]
+    /// reporting level. A `FALSE` indicates that the state below the [`Resolution`] level of the
+    /// device is not cleared when the time is set. Normal PC-AT CMOS RTC devices set this value to
+    /// `FALSE`.
+    ///
+    ///  [`Resolution`]: ./struct.EFI_TIME_CAPABILITIES.html#structfield.Resolution
+    pub SetsToZero: BOOLEAN,
+}
+
+pub const EFI_UNSPECIFIED_TIMEZONE: UINT16 = 0x07FF;
+
+pub const EFI_TIME_ADJUST_DAYLIGHT: UINT8 = 0x01;
+pub const EFI_TIME_IN_DAYLIGHT: UINT8 = 0x02;
+
+type EFI_GET_TIME = extern "efiapi" fn(
+    Time: *mut EFI_TIME,
+    Capabilities: *mut EFI_TIME_CAPABILITIES,
+) -> EFI_STATUS;

@@ -51,6 +51,33 @@ pub struct EFI_RUNTIME_SERVICES {
     pub Hdr: EFI_TABLE_HEADER,
 
     GetTime: EFI_GET_TIME,
+    SetTime: EFI_SET_TIME,
+}
+
+impl EFI_RUNTIME_SERVICES {
+    /// Returns the current time and date information, and the time-keeping capabilities of the
+    /// hardware platform.
+    ///
+    /// The GetTime() function returns a time that was valid sometime during the call to the
+    /// function. While the returned [`EFI_TIME`] structure contains [`TimeZone`] and [`Daylight`]
+    /// savings time information, the actual clock does not maintain these values. The current time
+    /// zone and daylight saving time information returned by [`GetTime()`] are the values that were
+    /// last set via [`SetTime()`].
+    ///
+    /// The [`GetTime()`] function should take approximately the same amount of time to read the time
+    /// each time it is called. All reported device capabilities are to be rounded up.
+    ///
+    /// During runtime, if a PC-AT CMOS device is present in the platform the caller must
+    /// synchronize access to the device before calling [`GetTime()`].
+    ///
+    /// [`EFI_TIME`]: crate::tables::runtime_services::EFI_TIME
+    /// [`TimeZone`]: ./struct.EFI_TIME.html#structfield.TimeZone
+    /// [`Daylight`]: ./struct.EFI_TIME.html#structfield.Daylight
+    /// [`GetTime()`]: ./struct.EFI_RUNTIME_SERVICES.html#method.GetTime
+    /// [`SetTime()`]: ./struct.EFI_RUNTIME_SERVICES.html#method.SetTime
+    pub unsafe fn GetTime(&self, Time: *mut EFI_TIME, Capabilities: *mut EFI_TIME_CAPABILITIES) -> EFI_STATUS {
+        (self.GetTime)(Time, Capabilities)
+    }
 }
 
 /// Represents current time information.
@@ -127,4 +154,8 @@ pub const EFI_TIME_IN_DAYLIGHT: UINT8 = 0x02;
 type EFI_GET_TIME = extern "efiapi" fn(
     Time: *mut EFI_TIME,
     Capabilities: *mut EFI_TIME_CAPABILITIES,
+) -> EFI_STATUS;
+
+type EFI_SET_TIME = extern "efiapi" fn(
+    Time: *mut EFI_TIME,
 ) -> EFI_STATUS;

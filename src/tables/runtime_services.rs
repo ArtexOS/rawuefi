@@ -70,6 +70,16 @@ impl EFI_RUNTIME_SERVICES {
     /// During runtime, if a PC-AT CMOS device is present in the platform the caller must
     /// synchronize access to the device before calling [`GetTime()`].
     ///
+    /// # Parameters
+    ///
+    /// ## `Time`
+    ///
+    /// A pointer to storage to receive a snapshot of the current time.
+    ///
+    /// ## `Capabilities`
+    ///
+    /// An optional pointer to a buffer to receive the real time clock device’s capabilities.
+    ///
     /// [`EFI_TIME`]: crate::tables::runtime_services::EFI_TIME
     /// [`TimeZone`]: ./struct.EFI_TIME.html#structfield.TimeZone
     /// [`Daylight`]: ./struct.EFI_TIME.html#structfield.Daylight
